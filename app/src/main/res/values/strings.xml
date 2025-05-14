@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Islamic Names</string>
+    <string name="boys">Boys</string>
+    <string name="girls">Girls</string>
+    <string name="favorites">Favorites</string>
+    <string name="menu">Menu</string>
+    <string name="search_hint">Search names...</string>
+    <string name="no_favorites">No favorite names yet.\nTap the heart icon to add favorites.</string>
+    <string name="about">About Islamic Names</string>
+    <string name="settings">App Settings</string>
+    <string name="share">Share This App</string>
+    <string name="rate">Rate Us</string>
+    <string name="about_text">Islamic Names is an app designed to help Muslim parents find beautiful and meaningful names for their children. Each name includes its meaning and Arabic script.\n\nVersion 1.0</string>
+    <string name="share_text">Check out the Islamic Names app - find beautiful names with meanings!</string>
+</resources>
