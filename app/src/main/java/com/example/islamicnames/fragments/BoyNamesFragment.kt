@@ -2,6 +2,7 @@ package com.example.islamicnames.fragments
 
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,13 +80,33 @@ class BoyNamesFragment : Fragment() {
         }
 
         // Set up search functionality
-        searchEditText.addTextChangedListener {
-            viewModel.search(it.toString())
-        }
+        searchEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Directly trigger the search here, which might be more reliable
+                val query = s?.toString() ?: ""
+                viewModel.search(query)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Not using this to avoid potential double triggers
+            }
+        })
 
         // Observe search results
+
         viewModel.searchResults.observe(viewLifecycleOwner) { names ->
+            // Clear any cached state in the adapter
+            nameAdapter.submitList(null)
+
+            // Then submit the new list
             nameAdapter.submitList(names)
+
+            // Scroll the RecyclerView back to the top
+            recyclerView.scrollToPosition(0)
         }
 
         // Observe active gender changes

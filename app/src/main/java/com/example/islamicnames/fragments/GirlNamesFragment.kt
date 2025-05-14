@@ -2,6 +2,8 @@ package com.example.islamicnames.fragments
 
 
 import android.os.Bundle
+import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -79,14 +82,48 @@ class GirlNamesFragment : Fragment() {
         }
 
         // Set up search functionality
-        searchEditText.addTextChangedListener {
+        /*searchEditText.addTextChangedListener {
             viewModel.search(it.toString())
-        }
+        }*/
+
+        // 4. Improve the TextWatcher implementation:
+        searchEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Directly trigger the search here, which might be more reliable
+                val query = s?.toString() ?: ""
+                viewModel.search(query)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Not using this to avoid potential double triggers
+            }
+        })
 
         // Observe search results
+
         viewModel.searchResults.observe(viewLifecycleOwner) { names ->
+            // Clear any cached state in the adapter
+            nameAdapter.submitList(null)
+
+            // Then submit the new list
             nameAdapter.submitList(names)
+
+            // Scroll the RecyclerView back to the top
+            recyclerView.scrollToPosition(0)
         }
+
+
+        /*searchEditText.setOnKeyListener { _, _, _ ->
+            // This will trigger on every key event including backspace
+            val query = searchEditText.text.toString()
+            Log.d("KeyListener", "Key event, current text: '$query'")
+            viewModel.search(query)
+            false // Don't consume the event
+        }*/
 
         // Observe active gender changes
         CoroutineScope(Dispatchers.Main).launch {

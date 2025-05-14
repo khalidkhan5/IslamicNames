@@ -59,10 +59,12 @@ class NameViewModel(private val repository: NameRepository) : ViewModel() {
         val results = repository.searchNames(query)
 
         // Filter by active gender if we're in the names view
-        _searchResults.value = when (activeGender.value) {
+        val filteredResults = when (activeGender.value) {
             Gender.BOY -> results.filter { it.gender == Gender.BOY }
             Gender.GIRL -> results.filter { it.gender == Gender.GIRL }
         }
+
+        _searchResults.postValue(filteredResults)
     }
 
     fun setActiveGender(gender: Gender) {
