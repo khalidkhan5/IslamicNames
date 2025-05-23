@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class GirlNamesFragment : Fragment() {
 
@@ -35,8 +37,8 @@ class GirlNamesFragment : Fragment() {
     private lateinit var boysButton: Button
     private lateinit var girlsButton: Button
 
-    private val viewModel: NameViewModel by viewModels {
-        NameViewModelFactory(NameRepository(this.requireContext()))
+    private val viewModel: NameViewModel by activityViewModels {
+        NameViewModelFactory(NameRepository(this.requireActivity()))
     }
 
     override fun onCreateView(

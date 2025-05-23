@@ -73,28 +73,34 @@ class NameRepository(private val context: Context) {
         // First, find the name in the current list
         val nameToToggle = _namesFlow.value.find { it.id == nameId } ?: return
 
-        // Update the favorites list
-        if (nameToToggle.isFavorite) {
-            // If it was favorite, remove it
-            favorites.removeAll { it.id == nameId }
+        // Update the names in the flow first
+        val updatedNames = _namesFlow.value.map { name ->
+            if (name.id == nameId) {
+                name.copy(isFavorite = !name.isFavorite)
+            } else {
+                name
+            }
+        }
+
+        // Update the namesFlow immediately
+        _namesFlow.value = updatedNames
+
+        // Update the favorites list based on the new state
+        val updatedName = updatedNames.find { it.id == nameId }!!
+        if (updatedName.isFavorite) {
+            // If it's now favorite, add it to favorites list
+            favorites.removeAll { it.id == nameId } // Remove if exists to avoid duplicates
+            favorites.add(updatedName)
         } else {
-            // If it wasn't favorite, add it
-            favorites.add(nameToToggle.copy(isFavorite = true))
+            // If it's no longer favorite, remove it from favorites list
+            favorites.removeAll { it.id == nameId }
         }
 
         // Save the updated favorites to storage
         saveFavorites()
 
-        // Update the names in the flow
-        _namesFlow.update { names ->
-            names.map { name ->
-                if (name.id == nameId) {
-                    name.copy(isFavorite = !name.isFavorite)
-                } else {
-                    name
-                }
-            }
-        }
+        // Update the favorites flow immediately with the current favorites
+        _favoritesFlow.value = updatedNames.filter { it.isFavorite }
     }
 
     private fun updateFavoritesFlow() {

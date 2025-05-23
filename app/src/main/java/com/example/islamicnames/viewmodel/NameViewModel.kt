@@ -52,7 +52,6 @@ class NameViewModel(private val repository: NameRepository) : ViewModel() {
     private fun updateNames() {
         _boyNames.value = repository.getBoyNames()
         _girlNames.value = repository.getGirlNames()
-        _favorites.value = repository.getFavorites()
         search(_searchQuery.value)
     }
 
