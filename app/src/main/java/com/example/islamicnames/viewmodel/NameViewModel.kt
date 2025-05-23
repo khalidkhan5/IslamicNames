@@ -41,6 +41,12 @@ class NameViewModel(private val repository: NameRepository) : ViewModel() {
                 updateNames()
             }
         }
+
+        viewModelScope.launch {
+            repository.favoritesFlow.collect { favoritesList ->
+                _favorites.value = favoritesList
+            }
+        }
     }
 
     private fun updateNames() {

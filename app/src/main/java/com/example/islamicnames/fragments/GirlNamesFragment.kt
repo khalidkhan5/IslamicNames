@@ -94,12 +94,12 @@ class GirlNamesFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Directly trigger the search here, which might be more reliable
-                val query = s?.toString() ?: ""
-                viewModel.search(query)
             }
 
             override fun afterTextChanged(s: Editable?) {
                 // Not using this to avoid potential double triggers
+                val query = s?.toString() ?: ""
+                viewModel.search(query)
             }
         })
 
@@ -116,14 +116,6 @@ class GirlNamesFragment : Fragment() {
             recyclerView.scrollToPosition(0)
         }
 
-
-        /*searchEditText.setOnKeyListener { _, _, _ ->
-            // This will trigger on every key event including backspace
-            val query = searchEditText.text.toString()
-            Log.d("KeyListener", "Key event, current text: '$query'")
-            viewModel.search(query)
-            false // Don't consume the event
-        }*/
 
         // Observe active gender changes
         CoroutineScope(Dispatchers.Main).launch {
