@@ -85,8 +85,10 @@ class NameRepository(private val context: Context) {
         // Update the namesFlow immediately
         _namesFlow.value = updatedNames
 
-        // Update the favorites list based on the new state
+        // Find the updated name
         val updatedName = updatedNames.find { it.id == nameId }!!
+
+        // Update the favorites list based on the new state
         if (updatedName.isFavorite) {
             // If it's now favorite, add it to favorites list
             favorites.removeAll { it.id == nameId } // Remove if exists to avoid duplicates
@@ -99,8 +101,8 @@ class NameRepository(private val context: Context) {
         // Save the updated favorites to storage
         saveFavorites()
 
-        // Update the favorites flow immediately with the current favorites
-        _favoritesFlow.value = updatedNames.filter { it.isFavorite }
+        // Update the favorites flow with only the favorites from the updated list
+        updateFavoritesFlow()
     }
 
     private fun updateFavoritesFlow() {
@@ -124,9 +126,9 @@ class NameRepository(private val context: Context) {
 
     fun searchNames(query: String): List<Name> {
         return if (query.isBlank()) {
-            allNames
+            _namesFlow.value  // Changed from allNames to _namesFlow.value to include favorite states
         } else {
-            allNames.filter {
+            _namesFlow.value.filter {  // Changed from allNames to _namesFlow.value
                 it.name.startsWith(query, ignoreCase = true)
             }
         }
