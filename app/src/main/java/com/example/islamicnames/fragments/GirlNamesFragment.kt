@@ -120,7 +120,7 @@ class GirlNamesFragment : Fragment() {
 
 
         // Observe active gender changes
-        CoroutineScope(Dispatchers.Main).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.activeGender.collect { gender ->
                 when (gender) {
                     Gender.BOY -> updateButtonSelection(true)

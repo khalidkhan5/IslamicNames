@@ -12,6 +12,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.islamicnames.R
@@ -112,7 +113,7 @@ class BoyNamesFragment : Fragment() {
         }
 
         // Observe active gender changes
-        CoroutineScope(Dispatchers.Main).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.activeGender.collect { gender ->
                 when (gender) {
                     Gender.BOY -> updateButtonSelection(true)

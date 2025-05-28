@@ -26,6 +26,7 @@ class NameAdapter(
     override fun onBindViewHolder(holder: NameViewHolder, position: Int) {
         val name = getItem(position)
         holder.bind(name, onFavoriteClick, showFavoriteIcon)
+
     }
 
     class NameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
