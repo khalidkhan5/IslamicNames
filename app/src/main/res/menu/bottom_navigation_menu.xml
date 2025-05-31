@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/boyNamesFragment"
-        android:icon="@drawable/ic_boy_names_vector2"
+        android:icon="@drawable/ic_boy_names_vector3"
         android:title="Boys" />
 
     <item
         android:id="@+id/girlNamesFragment"
-        android:icon="@drawable/ic_girl_names_vector2"
+        android:icon="@drawable/ic_girl_names_vector3"
         android:title="Girls"/>
 
     <item
