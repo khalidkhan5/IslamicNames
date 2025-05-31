@@ -13,12 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.islamicnames.R
 import com.example.islamicnames.adapter.NameAdapter
 import com.example.islamicnames.data.NameRepository
 import com.example.islamicnames.model.Gender
+import com.example.islamicnames.model.Name
 import com.example.islamicnames.viewmodel.NameViewModel
 import com.example.islamicnames.viewmodel.NameViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +61,9 @@ class BoyNamesFragment : Fragment() {
         nameAdapter = NameAdapter(
             onFavoriteClick = { name ->
                 viewModel.toggleFavorite(name.id)
+            },
+            onNameClick = { name -> // Add this callback
+                openNameDetails(name)
             }
         )
 
@@ -100,7 +105,6 @@ class BoyNamesFragment : Fragment() {
         })
 
         // Observe search results
-
         viewModel.searchResults.observe(viewLifecycleOwner) { names ->
             // Clear any cached state in the adapter
             nameAdapter.submitList(null)
@@ -121,6 +125,13 @@ class BoyNamesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun openNameDetails(name: Name) {
+        val bundle = Bundle().apply {
+            putInt("name_id", name.id)
+        }
+        findNavController().navigate(R.id.action_boyNamesFragment_to_nameDetailsFragment, bundle)
     }
 
     private fun updateButtonSelection(isBoySelected: Boolean) {

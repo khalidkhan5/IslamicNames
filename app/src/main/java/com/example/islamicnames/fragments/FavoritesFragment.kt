@@ -9,11 +9,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.islamicnames.R
 import com.example.islamicnames.adapter.NameAdapter
 import com.example.islamicnames.data.NameRepository
+import com.example.islamicnames.model.Name
 import com.example.islamicnames.viewmodel.NameViewModel
 import com.example.islamicnames.viewmodel.NameViewModelFactory
 
@@ -45,6 +47,9 @@ class FavoritesFragment : Fragment() {
         nameAdapter = NameAdapter(
             onFavoriteClick = { name ->
                 viewModel.toggleFavorite(name.id)
+            },
+            onNameClick = { name -> // Add this callback
+                openNameDetails(name)
             }
         )
         recyclerView.apply {
@@ -65,5 +70,11 @@ class FavoritesFragment : Fragment() {
                 recyclerView.visibility = View.VISIBLE
             }
         }
+    }
+    private fun openNameDetails(name: Name) {
+        val bundle = Bundle().apply {
+            putInt("name_id", name.id)
+        }
+        findNavController().navigate(R.id.action_girlNamesFragment_to_nameDetailsFragment, bundle)
     }
 }

@@ -14,6 +14,7 @@ import com.example.islamicnames.model.Name
 
 class NameAdapter(
     private val onFavoriteClick: (Name) -> Unit,
+    private val onNameClick: (Name) -> Unit, // Add this parameter
     private val showFavoriteIcon: Boolean = true
 ) : ListAdapter<Name, NameAdapter.NameViewHolder>(NameDiffCallback()) {
 
@@ -25,8 +26,7 @@ class NameAdapter(
 
     override fun onBindViewHolder(holder: NameViewHolder, position: Int) {
         val name = getItem(position)
-        holder.bind(name, onFavoriteClick, showFavoriteIcon)
-
+        holder.bind(name, onFavoriteClick, onNameClick, showFavoriteIcon)
     }
 
     class NameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,10 +35,18 @@ class NameAdapter(
         private val tvArabicName: TextView = itemView.findViewById(R.id.tv_arabic_name)
         private val ivFavorite: ImageView = itemView.findViewById(R.id.iv_favorite)
 
-        fun bind(name: Name, onFavoriteClick: (Name) -> Unit, showFavoriteIcon: Boolean) {
+        fun bind(
+            name: Name,
+            onFavoriteClick: (Name) -> Unit,
+            onNameClick: (Name) -> Unit, // Add this parameter
+            showFavoriteIcon: Boolean
+        ) {
             tvName.text = name.name
             tvMeaning.text = name.meaning
             tvArabicName.text = name.arabicName
+
+            // Add click listener for the entire item
+            itemView.setOnClickListener { onNameClick(name) }
 
             if (showFavoriteIcon) {
                 ivFavorite.visibility = View.VISIBLE
@@ -46,14 +54,17 @@ class NameAdapter(
                     if (name.isFavorite) R.drawable.ic_favorite_filled
                     else R.drawable.ic_favorite_outline
                 )
-                ivFavorite.setOnClickListener { onFavoriteClick(name) }
+                ivFavorite.setOnClickListener {
+                    onFavoriteClick(name)
+                    // Prevent the click from propagating to the parent
+                    it.isClickable = true
+                }
             } else {
                 ivFavorite.visibility = View.GONE
             }
         }
     }
 }
-
 class NameDiffCallback : DiffUtil.ItemCallback<Name>() {
     override fun areItemsTheSame(oldItem: Name, newItem: Name): Boolean {
         return oldItem.id == newItem.id

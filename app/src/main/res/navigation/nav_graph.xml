@@ -1,26 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/girlNamesFragment">
 
     <fragment
         android:id="@+id/boyNamesFragment"
         android:name="com.example.islamicnames.fragments.BoyNamesFragment"
-        android:label="Boys Names" />
+        android:label="Boys Names">
+
+        <action
+            android:id="@+id/action_boyNamesFragment_to_nameDetailsFragment"
+            app:destination="@id/nameDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/girlNamesFragment"
         android:name="com.example.islamicnames.fragments.GirlNamesFragment"
-        android:label="Girls Names" />
+        android:label="Girls Names">
+
+        <action
+            android:id="@+id/action_girlNamesFragment_to_nameDetailsFragment"
+            app:destination="@id/nameDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.islamicnames.fragments.FavoritesFragment"
-        android:label="Favorites" />
+        android:label="Favorites">
+
+        <action
+            android:id="@+id/action_favoritesFragment_to_nameDetailsFragment"
+            app:destination="@id/nameDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/menuFragment"
         android:name="com.example.islamicnames.fragments.MenuFragment"
         android:label="Menu" />
+
+    <fragment
+        android:id="@+id/nameDetailsFragment"
+        android:name="com.example.islamicnames.fragments.NameDetailsFragment"
+        android:label="Name Details"
+        tools:layout="@layout/fragment_name_details">
+
+        <argument
+            android:name="name_id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

@@ -15,12 +15,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.islamicnames.R
 import com.example.islamicnames.adapter.NameAdapter
 import com.example.islamicnames.data.NameRepository
 import com.example.islamicnames.model.Gender
+import com.example.islamicnames.model.Name
 import com.example.islamicnames.viewmodel.NameViewModel
 import com.example.islamicnames.viewmodel.NameViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +63,9 @@ class GirlNamesFragment : Fragment() {
         nameAdapter = NameAdapter(
             onFavoriteClick = { name ->
                 viewModel.toggleFavorite(name.id)
+            },
+            onNameClick = { name -> // Add this callback
+                openNameDetails(name)
             }
         )
         recyclerView.apply {
@@ -128,6 +133,13 @@ class GirlNamesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun openNameDetails(name: Name) {
+        val bundle = Bundle().apply {
+            putInt("name_id", name.id)
+        }
+        findNavController().navigate(R.id.action_girlNamesFragment_to_nameDetailsFragment, bundle)
     }
 
     private fun updateButtonSelection(isBoySelected: Boolean) {
